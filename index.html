@@ -116,7 +116,7 @@ button{
 
 <body>
 
-<audio id="song" src="your-song.mp3" autoplay loop></audio>
+<audio id="song" src="your-song.mp3" loop></audio>
 
 <div class="card">
   <button id="muteBtn" onclick="toggleMute()">🔊</button>
@@ -135,6 +135,12 @@ button{
 </div>
 
 <script>
+  document.body.addEventListener("click", () => {
+  const audio = document.getElementById("song");
+  if (audio.paused) {
+    audio.play();
+  }
+}, { once:true });
 const names = [
   "Roju",
   "Rejina",
