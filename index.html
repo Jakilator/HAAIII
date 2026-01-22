@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hello Surprise</title>
+
+<style>
+body{
+  padding:10px;
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#1f1c2c,#302b63,#24243e);
+  color:white;
+  font-family:Arial,Helvetica,sans-serif;
+  overflow:hidden;
+}
+
+.card{
+  position:relative;
+  text-align:center;
+  padding:40px;
+  border-radius:20px;
+  background:rgba(0,0,0,0.4);
+  box-shadow:0 0 30px rgba(0,0,0,0.6);
+  animation:float 4s ease-in-out infinite;
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-15px)}
+}
+
+#name{
+  font-size:2.5rem;
+  letter-spacing:2px;
+  animation:glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow{
+  from{text-shadow:0 0 10px #fff}
+  to{text-shadow:0 0 25px #00f0ff}
+}
+
+button{
+  margin-top:20px;
+  padding:10px 22px;
+  border:none;
+  border-radius:25px;
+  font-size:1rem;
+  cursor:pointer;
+  background:#ff7eb3;
+  color:#000;
+}
+
+/* floating hearts */
+.heart{
+  position:absolute;
+  width:12px;
+  height:12px;
+  background:white;
+  transform:rotate(45deg);
+  animation:rise 6s linear infinite;
+}
+.heart::before,.heart::after{
+  content:'';
+  position:absolute;
+  width:12px;
+  height:12px;
+  background:white;
+  border-radius:50%;
+}
+.heart::before{top:-6px;left:0}
+.heart::after{left:-6px;top:0}
+
+@keyframes rise{
+  0%{bottom:-20px;opacity:0}
+  50%{opacity:0.8}
+  100%{bottom:110%;opacity:0}
+}
+
+/* sparkle animation */
+.sparkle{
+  position:absolute;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.8);
+  bottom:-10px;
+  animation:sparkleRise linear;
+}
+
+@keyframes sparkleRise{
+  0%{transform:translateY(0) scale(0.5);opacity:0}
+  30%{opacity:0.9}
+  100%{transform:translateY(-110vh) scale(1.2);opacity:0}
+}
+
+/* mute button */
+#muteBtn{
+  position:absolute;
+  top:15px;
+  right:15px;
+  border:none;
+  border-radius:50%;
+  padding:8px;
+  cursor:pointer;
+  background:rgba(255,255,255,0.2);
+  color:white;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="song" src="your-song.mp3" autoplay loop></audio>
+
+<div class="card">
+  <button id="muteBtn" onclick="toggleMute()">🔊</button>
+
+  <h1>Haaai <span id="name">Rojina</span> 🐒 </h1>
+  <p>Yeh Tere Liye Dost</p>
+
+  <button id="revealBtn" onclick="toggleShayari()">Click Here</button>
+
+  <p id="shayari" style="display:none;margin-top:15px;font-style:italic;">
+    Teri dosti meri zindagi ka wo geet hai,<br>
+    Jo har tanhai mein bhi mehfil ban jaata hai.
+  </p>
+</div>
+
+<script>
+const names = [
+  "Roju",
+  "Rejina",
+  "Bestie",
+  "Rejiiii",
+  "𝑄𝑢𝑒𝑒𝑛_𝑅𝑒𝑗𝑖"
+]; // edit or add more
+
+const nameEl = document.getElementById("name");
+let i = 0, j = 0, deleting = false;
+
+function typeLoop(){
+  const current = names[i];
+
+  if(!deleting){
+    nameEl.textContent = current.slice(0, j++);
+    if(j > current.length){
+      setTimeout(() => deleting = true, 1200);
+    }
+  } else {
+    nameEl.textContent = current.slice(0, j--);
+    if(j < 0){
+      deleting = false;
+      i = (i + 1) % names.length;
+      j = 0;
+    }
+  }
+}
+
+setInterval(typeLoop, 120);
+
+
+/* auto reveal after 30 seconds */
+setTimeout(()=>{
+  const s=document.getElementById('shayari');
+  const b=document.getElementById('revealBtn');
+  s.style.display='block';
+  b.style.display='none';
+},10000);
+
+function toggleShayari(){
+  const s=document.getElementById('shayari');
+  const b=document.getElementById('revealBtn');
+  s.style.display='block';
+  b.style.display='none';
+}
+
+function toggleMute(){
+  const a=document.getElementById('song');
+  const b=document.getElementById('muteBtn');
+  a.muted=!a.muted;
+  b.textContent=a.muted?'🔇':'🔊';
+}
+
+/* hearts */
+function createHeart(){
+  const heart=document.createElement('div');
+  heart.className='heart';
+  heart.style.left=Math.random()*100+'vw';
+  heart.style.animationDuration=(5+Math.random()*4)+'s';
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(),9000);
+}
+setInterval(createHeart,500);
+
+/* sparkles */
+function createSparkle(){
+  const s=document.createElement('div');
+  s.className='sparkle';
+  s.style.left=Math.random()*100+'vw';
+  s.style.animationDuration=(6+Math.random()*4)+'s';
+  document.body.appendChild(s);
+  setTimeout(()=>s.remove(),10000);
+}
+setInterval(createSparkle,700);
+</script>
+
+</body>
+</html>
